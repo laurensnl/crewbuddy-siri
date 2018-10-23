@@ -1,5 +1,5 @@
+import { Config } from "config/config";
 import fetch from "node-fetch";
-import { Config } from "../config/config";
 
 const { crewBuddyURL, defaultQuery } = Config;
 
