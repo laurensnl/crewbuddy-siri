@@ -1,5 +1,5 @@
 import * as express from "express";
-import { StandbyController } from "./Standby/controllers/standby";
+import { StandbyController } from "./standby/controllers/standby";
 
 class MainRoutes {
   public router: express.Router = express.Router();
