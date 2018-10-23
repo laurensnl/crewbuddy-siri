@@ -1,0 +1,8 @@
+1. Put this in .git/hooks/post-merge:
+
+#!/bin/sh
+npm install
+npm run build
+pm2 restart crewbuddy
+
+2. Run "chmod +x .git/hooks/post-merge"
