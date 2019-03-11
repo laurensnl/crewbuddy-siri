@@ -110,7 +110,13 @@ export function getDestinationName(destination) {
     VCE: "Venice",
     LPA: "Las Palmas",
     LIS: "Lisbon",
-    PMI: "Palma de Mallorca"
+    PMI: "Palma de Mallorca",
+    INN: "Innsbruck",
+    SZG: "Salzburg",
+    AHU: "Al Hoceima",
+    GVA: "Geneva",
+    TNG: "Tangier",
+    NDR: "Nador"
   };
 
   return destinations[destination] || destination;
