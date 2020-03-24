@@ -15,7 +15,7 @@ export class Controller {
 
     const flights = await fetchFlights({ sampleData: false });
 
-    const output = await parseFlights(flights, req.query);
+    const output = parseFlights(flights, req.query);
 
     res.status(200).send(output);
   }
