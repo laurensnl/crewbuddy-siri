@@ -1,10 +1,9 @@
-import { Request, Response } from "express";
 import { fetchFlights } from "../helpers/fetch-flights";
 import { isValidQuery } from "../helpers/helpers";
 import { parseFlights } from "../helpers/parse-flights";
 
 export class Controller {
-  public async root(req: Request, res: Response) {
+  public async root(req: any, res: any) {
     const { code, role, base, day } = req.query;
 
     const isValid = isValidQuery(req.query);
