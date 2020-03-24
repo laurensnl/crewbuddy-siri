@@ -1,17 +1,19 @@
 import moment from "moment";
 
 interface isValid {
-  valid?: boolean,
-  error?: string
+  valid?: boolean;
+  error?: string;
 }
 
 export function isValidQuery(query): isValid {
   const { code, role, base, day } = query;
 
-  if (!code) return { error: 'Missing crew code (add code: "XXX" to query)'};
-  if (!role) return { error: 'Missing role (add role: "FOJ" | "FC" to query)'};
-  if (!base) return { error: 'Missing base (add base: "RTM" | "AMS" | "EIN" to query)'};
-  if (!day) return { error: 'Missing day (add day: "today" | "tomorrow" to query)'};
+  if (!code) return { error: 'Missing crew code (add code: "XXX" to query)' };
+  if (!role) return { error: 'Missing role (add role: "FOJ" | "FC" to query)' };
+  if (!base)
+    return { error: 'Missing base (add base: "RTM" | "AMS" | "EIN" to query)' };
+  if (!day)
+    return { error: 'Missing day (add day: "today" | "tomorrow" to query)' };
 
   return { valid: true };
 }
@@ -115,8 +117,19 @@ export function getDestinationName(destination) {
     SZG: "Salzburg",
     AHU: "Al Hoceima",
     GVA: "Geneva",
-    TNG: "Tangier",
-    NDR: "Nador"
+    TNG: "Tanger",
+    NDR: "Nador",
+    MUC: "Munchen",
+    PMO: "Palermo",
+    NCE: "Nice",
+    BDS: "Brindisi",
+    SUF: "Lamezia",
+    KGS: "Kos",
+    MPL: "Montpellier",
+    AEY: "Akureyri",
+    BLL: "Billund",
+    EDI: "Edinburgh",
+    BIO: "Bilbao"
   };
 
   return destinations[destination] || destination;
