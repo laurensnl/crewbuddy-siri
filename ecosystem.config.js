@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: "crewbuddy",
+      name: "server",
       script: "./src/server.ts",
       instances: 1,
       autorestart: true,
