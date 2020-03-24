@@ -17,6 +17,8 @@ export class Controller {
 
     const output = parseFlights(flights, req.query);
 
+    console.log(output);
+
     res.status(200).send(output);
   }
 }
