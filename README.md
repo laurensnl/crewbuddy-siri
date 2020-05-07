@@ -25,5 +25,6 @@ Commit changes to master branch
 ```
 $ cd ~/crewbuddy-siri
 $ git pull
-$ pm2 restart all
+
+Server will restart automatically after compiling
 ```
