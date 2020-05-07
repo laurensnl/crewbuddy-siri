@@ -1,4 +1,5 @@
 import moment from "moment";
+const airports = require("airport-codes");
 
 interface isValid {
   valid?: boolean;
@@ -44,7 +45,7 @@ export function formatFlight(flight, role) {
 export function getOtherRole(role) {
   const otherRole = {
     FOJ: "FC",
-    FC: "FOJ"
+    FC: "FOJ",
   };
   return otherRole[role];
 }
@@ -57,7 +58,7 @@ export function getOtherCrewMember(flight, role) {
 export function getRoleName(role) {
   const roleNames = {
     FOJ: "First Officer",
-    FC: "captain"
+    FC: "captain",
   };
   return roleNames[role];
 }
@@ -82,55 +83,9 @@ export function formatName(crewmember) {
 }
 
 export function formatTime(date) {
-  return moment
-    .utc(date)
-    .local()
-    .format("HH:mm");
+  return moment.utc(date).local().format("HH:mm");
 }
 
 export function getDestinationName(destination) {
-  const destinations = {
-    AMS: "Amsterdam",
-    RTM: "Rotterdam",
-    EIN: "Eindhoven",
-    DBV: "Dubrovnik",
-    BCN: "Barcelona",
-    BUD: "Budapest",
-    FAO: "Faro",
-    HER: "Heraklion",
-    AGP: "Malaga",
-    IBZ: "Ibiza",
-    EGC: "Bergerac",
-    ALC: "Alicante",
-    VLC: "Valencia",
-    VIE: "Wien",
-    SPU: "Split",
-    LEI: "Almería",
-    TFS: "Tenerife",
-    GRO: "Girona",
-    PSA: "Pisa",
-    VCE: "Venice",
-    LPA: "Las Palmas",
-    LIS: "Lisbon",
-    PMI: "Palma de Mallorca",
-    INN: "Innsbruck",
-    SZG: "Salzburg",
-    AHU: "Al Hoceima",
-    GVA: "Geneva",
-    TNG: "Tanger",
-    NDR: "Nador",
-    MUC: "Munchen",
-    PMO: "Palermo",
-    NCE: "Nice",
-    BDS: "Brindisi",
-    SUF: "Lamezia",
-    KGS: "Kos",
-    MPL: "Montpellier",
-    AEY: "Akureyri",
-    BLL: "Billund",
-    EDI: "Edinburgh",
-    BIO: "Bilbao"
-  };
-
-  return destinations[destination] || destination;
+  return airports.findWhere({ iata: destination }).get("name");
 }
