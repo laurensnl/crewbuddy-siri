@@ -26,5 +26,5 @@ Commit changes to master branch
 $ cd ~/crewbuddy-siri
 $ git pull
 
-Server will restart automatically after compiling
+Server will restart automatically
 ```
