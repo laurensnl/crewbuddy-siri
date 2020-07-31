@@ -1,7 +1,7 @@
 ## Run
 
 ```
-$ pm2 start
+$ pm2 start ./src/server.ts
 ```
 
 ## Update the list of Airport Codes
