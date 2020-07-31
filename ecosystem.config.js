@@ -5,10 +5,10 @@ module.exports = {
   apps: [
     {
       name: "crewbuddy",
-      script: "./src/server.ts",
+      script: "./dist/server.js",
       instances: 1,
       autorestart: true,
-      watch: ["./src"],
+      watch: ["./dist"],
       watch_delay: 1000,
       ignore_watch: ["node_modules"],
       max_memory_restart: "1G",
