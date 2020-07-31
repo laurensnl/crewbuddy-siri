@@ -4,7 +4,7 @@
 module.exports = {
   apps: [
     {
-      name: "server",
+      name: "crewbuddy",
       script: "./src/server.ts",
       instances: 1,
       autorestart: true,
@@ -14,11 +14,11 @@ module.exports = {
       max_memory_restart: "1G",
       exp_backoff_restart_delay: 100,
       env: {
-        NODE_ENV: "development"
+        NODE_ENV: "development",
       },
       env_production: {
-        NODE_ENV: "production"
-      }
-    }
-  ]
+        NODE_ENV: "production",
+      },
+    },
+  ],
 };
