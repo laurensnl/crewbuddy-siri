@@ -1,6 +1,3 @@
-// Does not work
-// Use $ pm2 start ./src/server.ts instead
-
 module.exports = {
   apps: [
     {
