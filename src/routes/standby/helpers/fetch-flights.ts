@@ -28,7 +28,6 @@ export const fetchFlights = async (options: OptionsProps) => {
 
   try {
     const results = await response.json();
-    console.log(results);
     return results[3];
   } catch (err) {
     throw new Error(`Invalid response received from Crew Buddy`);
