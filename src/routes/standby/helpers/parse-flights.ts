@@ -2,7 +2,7 @@ import { filter, find, reject } from "lodash";
 import {
   formatFlight,
   getDestinationName,
-  pluralizeNumberOfFlights
+  pluralizeNumberOfFlights,
 } from "./helpers";
 import moment = require("moment");
 
@@ -20,7 +20,7 @@ interface Query {
   day: "today" | "tomorrow";
 }
 
-export function parseFlights(flights: Flight[], query: Query) {
+export const parseFlights = (flights: Flight[], query: Query) => {
   const { code, role, base, day } = query;
 
   const date = day === "today" ? moment() : moment().add(1, "day");
@@ -28,7 +28,7 @@ export function parseFlights(flights: Flight[], query: Query) {
   const flightsFromBase = filter(flights, { dep: base });
 
   const flightsOperatedByTransavia = reject(flightsFromBase, {
-    acversion: "738HMIA"
+    acversion: "738HMIA",
   });
 
   const flightsOnDate = filter(flightsOperatedByTransavia, (flight: Flight) =>
@@ -50,7 +50,7 @@ export function parseFlights(flights: Flight[], query: Query) {
     case 2:
       return parseOwnDoubleFlight(ownFlights, role);
   }
-}
+};
 
 const parseOwnSingleFlight = (flights, role) => {
   return `You are on the ${formatFlight(flights[0], role)}`;
@@ -72,6 +72,6 @@ const parseOpenFlights = (flights: Flight[], query: Query) => {
   return (
     `${pluralizeNumberOfFlights(flights.length)} at ` +
     `${getDestinationName(base)} ${day}.\n` +
-    `${flights.map(flight => formatFlight(flight, role))}`
+    `${flights.map((flight) => formatFlight(flight, role))}`
   );
 };

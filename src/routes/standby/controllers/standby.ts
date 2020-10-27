@@ -13,13 +13,13 @@ export class Controller {
       `Searching flights from ${base} without ${role} for ${day} for ${code}.`
     );
 
-    const flights = await fetchFlights({ sampleData: false });
-
-    const output = parseFlights(flights, req.query);
-
-    console.log(output);
-
-    res.status(200).send(output);
+    try {
+      const flights = await fetchFlights({ sampleData: false });
+      const output = parseFlights(flights, req.query);
+      res.status(200).send(output);
+    } catch (err) {
+      throw new Error(err);
+    }
   }
 }
 

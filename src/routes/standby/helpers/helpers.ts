@@ -11,6 +11,8 @@ export function isValidQuery(query): isValid {
 
   if (!code) return { error: 'Missing crew code (add code: "XXX" to query)' };
   if (!role) return { error: 'Missing role (add role: "FOJ" | "FC" to query)' };
+  if (role !== "FOJ" && role !== "FC")
+    return { error: 'Invalid role. Please use "FOJ" or "FC"' };
   if (!base)
     return { error: 'Missing base (add base: "RTM" | "AMS" | "EIN" to query)' };
   if (!day)

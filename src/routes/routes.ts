@@ -10,7 +10,7 @@ class MainRoutes {
 
   private config(): void {
     this.router.get("/standby", (req: express.Request, res: express.Response) =>
-      StandbyController.root(req, res)
+      StandbyController.root(req, res).catch((err) => console.error(err))
     );
   }
 }
