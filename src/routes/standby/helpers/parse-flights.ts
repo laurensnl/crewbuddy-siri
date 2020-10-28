@@ -1,4 +1,5 @@
 import { filter, find, reject } from "lodash";
+import pluralize from "pluralize";
 import {
   formatFlight,
   getDestinationName,
@@ -35,6 +36,10 @@ export const parseFlights = (flights: Flight[], query: Query) => {
     moment(flight.std, "YYYY-MM-D hh:mm").isSame(date, "day")
   );
 
+  const numberOfDepartingFlights = filter(flightsOnDate, (flight: Flight) =>
+    moment(flight.std, "YYYY-MM-D hh:mm").isAfter()
+  ).length;
+
   const ownFlights = filter(flightsOnDate, { crew: [{ code }] });
 
   const openFlights = filter(
@@ -44,7 +49,7 @@ export const parseFlights = (flights: Flight[], query: Query) => {
 
   switch (ownFlights.length) {
     case 0:
-      return parseOpenFlights(openFlights, query);
+      return parseOpenFlights(openFlights, query, numberOfDepartingFlights);
     case 1:
       return parseOwnSingleFlight(ownFlights, role);
     case 2:
@@ -66,12 +71,30 @@ const parseOwnDoubleFlight = (flights, role) => {
   );
 };
 
-const parseOpenFlights = (flights: Flight[], query: Query) => {
+const parseOpenFlights = (
+  flights: Flight[],
+  query: Query,
+  numberOfDepartingFlights: number
+) => {
   const { role, base, day } = query;
+
+  const baseName = getDestinationName(base);
+
+  const departingFlights =
+    numberOfDepartingFlights === 0
+      ? "no more flights"
+      : pluralize(
+          `${day === "today" ? "more" : ""} flights`,
+          numberOfDepartingFlights,
+          true
+        );
 
   return (
     `${pluralizeNumberOfFlights(flights.length)} at ` +
-    `${getDestinationName(base)} ${day}.\n` +
-    `${flights.map((flight) => formatFlight(flight, role))}`
+    `${baseName} ${day}.\n` +
+    `${flights.map((flight) => formatFlight(flight, role))}\n` +
+    `There ${
+      numberOfDepartingFlights === 1 ? "is" : "are"
+    } ${departingFlights} departing from ${baseName} ${day}`
   );
 };
