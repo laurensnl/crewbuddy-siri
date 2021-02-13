@@ -1,4 +1,6 @@
+import { find } from "lodash";
 import moment from "moment";
+import { CrewMember, Flight, Query, Role } from "types/types";
 const airports = require("airport-codes");
 
 interface isValid {
@@ -6,7 +8,7 @@ interface isValid {
   error?: string;
 }
 
-export function isValidQuery(query): isValid {
+export function isValidQuery(query: Query): isValid {
   const { code, role, base, day } = query;
 
   if (!code) return { error: 'Missing crew code (add code: "XXX" to query)' };
@@ -32,62 +34,46 @@ export function pluralizeNumberOfFlights(numberOfOpenFlights: number) {
   }
 }
 
-export function formatFlight(flight, role) {
-  const { arr, std } = flight;
-  const otherCrewMember = getOtherCrewMember(flight, role);
+export function formatFlight(flight: Flight, role: Role) {
+  const { dest, start } = flight;
+  const otherCrewMember = getOtherCrewMemberName(flight, role);
   const otherRole = getRoleName(getOtherRole(role));
 
-  return `${getDestinationName(arr)}, departing at ${formatTime(
-    std
+  return `${getDestinationName(dest)}, departing at ${formatTime(
+    start
   )} local with ${
     otherCrewMember ? otherCrewMember : `an unknown ${otherRole}`
   }.`;
 }
 
-export function getOtherRole(role) {
-  const otherRole = {
-    FOJ: "FC",
-    FC: "FOJ",
-  };
-  return otherRole[role];
-}
-
-export function getOtherCrewMember(flight, role) {
-  const otherRole = getOtherRole(role);
-  return getCrewMember(flight, otherRole);
+export function getOtherRole(role: Role) {
+  return role === "FOJ" ? "FC" : "FOJ";
 }
 
 export function getRoleName(role) {
-  const roleNames = {
-    FOJ: "First Officer",
-    FC: "captain",
-  };
-  return roleNames[role];
+  return role === "FOJ" ? "First Officer" : "captain";
 }
 
-export function getCrewMember(flight, role) {
-  for (const crewmember of flight.crew) {
-    const { type, code } = crewmember;
-    if (type === role) {
-      return formatName(crewmember);
-    }
-  }
+export function getOtherCrewMemberName(flight: Flight, role: Role) {
+  const otherRole = getOtherRole(role);
+  return getCrewMemberName(flight, otherRole);
 }
 
-export function formatName(crewmember) {
-  const { firstname, lastname, code } = crewmember;
-  if (!code) {
-    return;
-  }
-  const regex = /\(.+\)/g;
-  return `${firstname.replace(regex, "")} ${lastname}`;
-  // TODO: remove space
+export function getCrewMemberName(flight: Flight, role: Role) {
+  const crewMember = find(flight.crew, { role }) as CrewMember;
+  return formatName(crewMember);
+}
+
+export function formatName(crewMember: CrewMember) {
+  const { first_name, last_name, code } = crewMember;
+  return code ? `${first_name} ${last_name}` : undefined;
 }
 
 export function formatTime(date) {
   return moment.utc(date).local().format("HH:mm");
 }
 
-export function getDestinationName(destination) {
-  return airports.findWhere({ iata: destination }).get("name");
+export function getDestinationName(dest) {
+  if (!dest) return null;
+  return airports.findWhere({ iata: dest }).get("name");
 }

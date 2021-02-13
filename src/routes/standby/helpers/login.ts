@@ -1,35 +1,52 @@
+import cryptoRandomString from "crypto-random-string";
 import fetch, { Response } from "node-fetch";
 import { Config } from "../../../config/config";
-import { parseCookies } from "./parse-cookies";
 
-const { crewBuddyURL, user, password } = Config;
+const { loginUrl, user, password } = Config;
 
-const onSuccess = async (res: Response) => {
-  const result = await res.text();
-  const cookies = parseCookies(res);
+const onSuccess = async (res: Response, phpSessionId: string) => {
+  const result = await res.json();
+  // const cookies = parseCookies(res);
 
-  if (result.includes("loginSuccess")) {
+  if (result.success) {
     console.log("Successfully logged in to Crew Buddy");
-    return Promise.resolve(cookies);
+    return Promise.resolve({ phpSessionId });
   } else {
     throw new Error(`Failed to log in to Crew Buddy: ${result}`);
   }
 };
 
 const onError = (err: string) => {
+  console.log("ERROR");
   throw new Error(err);
 };
 
 export const login = async () => {
-  const data = { USER: user, PW: password, REMEMBER: true };
+  if (!user)
+    throw new Error(
+      "Please specify a user in config.ts (see sample-config.ts)"
+    );
+  if (!password)
+    throw new Error(
+      "Please specify a password in config.ts (see sample-config.ts)"
+    );
 
   console.log("Logging in to Crew Buddy");
 
-  return fetch(crewBuddyURL, {
+  const phpSessionId = cryptoRandomString({ length: 10 });
+
+  const body = {
+    user,
+    password,
+    phpSessionId,
+    remember: true,
+  };
+
+  return fetch(loginUrl, {
     method: "POST",
-    body: `LOGIN=${JSON.stringify(data)}`,
-    headers: { "content-type": "application/x-www-form-urlencoded" },
+    body: JSON.stringify(body),
+    headers: { "content-type": "application/json" },
   })
-    .then(onSuccess)
+    .then((res) => onSuccess(res, phpSessionId))
     .catch(onError);
 };

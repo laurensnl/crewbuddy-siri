@@ -1,9 +1,9 @@
 export const Config = {
   crewBuddyURL: "url",
-  user: "LWA",
-  password: "********",
+  user: "ABC",
+  password: "Welkom01",
   defaultQuery: {
-    user: "crew code",
+    user: "ABC",
     day: "today",
     date: "2018-10-19",
     bases: ["ams"],

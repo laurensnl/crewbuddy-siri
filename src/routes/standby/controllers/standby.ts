@@ -15,6 +15,7 @@ export class Controller {
 
     try {
       const flights = await fetchFlights({ sampleData: false });
+
       const output = parseFlights(flights, req.query);
       res.status(200).send(output);
     } catch (err) {

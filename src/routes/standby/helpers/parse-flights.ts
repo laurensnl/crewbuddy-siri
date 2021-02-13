@@ -1,25 +1,12 @@
 import { filter, find, reject } from "lodash";
 import pluralize from "pluralize";
+import { Flight, Query } from "types/types";
 import {
   formatFlight,
   getDestinationName,
   pluralizeNumberOfFlights,
 } from "./helpers";
 import moment = require("moment");
-
-interface Flight {
-  dep: string;
-  arr: string;
-  std: string;
-  crew: string[];
-}
-
-interface Query {
-  code: string;
-  role: "FOJ" | "FC";
-  base: "RTM" | "AMS" | "EIN";
-  day: "today" | "tomorrow";
-}
 
 export const parseFlights = (flights: Flight[], query: Query) => {
   const { code, role, base, day } = query;
@@ -33,18 +20,18 @@ export const parseFlights = (flights: Flight[], query: Query) => {
   });
 
   const flightsOnDate = filter(flightsOperatedByTransavia, (flight: Flight) =>
-    moment(flight.std, "YYYY-MM-D hh:mm").isSame(date, "day")
+    moment(flight.start).isSame(date, "day")
   );
 
   const numberOfDepartingFlights = filter(flightsOnDate, (flight: Flight) =>
-    moment(flight.std, "YYYY-MM-D hh:mm").isAfter()
+    moment(flight.start).isAfter()
   ).length;
 
   const ownFlights = filter(flightsOnDate, { crew: [{ code }] });
 
   const openFlights = filter(
     flightsOnDate,
-    (flight: Flight) => !find(flight.crew, { type: role })
+    (flight: Flight) => !find(flight.crew, { role })
   ) as Flight[];
 
   switch (ownFlights.length) {
@@ -64,8 +51,8 @@ const parseOwnSingleFlight = (flights, role) => {
 const parseOwnDoubleFlight = (flights, role) => {
   return (
     `Fuck your life, you are on the ` +
-    `${getDestinationName(flights[0].arr)} ` +
-    `${getDestinationName(flights[1].arr)}. ` +
+    `${getDestinationName(flights[0].dest)} ` +
+    `${getDestinationName(flights[1].dest)}. ` +
     `${formatFlight(flights[0], role)}\n` +
     `${formatFlight(flights[1], role)}`
   );
@@ -91,10 +78,10 @@ const parseOpenFlights = (
 
   return (
     `${pluralizeNumberOfFlights(flights.length)} at ` +
-    `${baseName} ${day}.\n` +
-    `${flights.map((flight) => formatFlight(flight, role))}\n` +
+    `${baseName} ${day}. \n` +
+    `${flights.map((flight) => formatFlight(flight, role)).join(" ")}\n` +
     `There ${
       numberOfDepartingFlights === 1 ? "is" : "are"
-    } ${departingFlights} departing from ${baseName} ${day}`
+    } ${departingFlights} departing from ${baseName} ${day}.`
   );
 };

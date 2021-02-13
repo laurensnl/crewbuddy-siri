@@ -4,6 +4,14 @@
 $ pm2 start
 ```
 
+## Run locally
+
+```
+$ yarn start
+```
+
+In a browser, go to http://localhost:4040/standby?code=LWA&role=FOJ&base=RTM&day=today.
+
 ## Update the list of Airport Codes
 
 ```
