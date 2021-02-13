@@ -6,7 +6,6 @@ const { loginUrl, user, password } = Config;
 
 const onSuccess = async (res: Response, phpSessionId: string) => {
   const result = await res.json();
-  // const cookies = parseCookies(res);
 
   if (result.success) {
     console.log("Successfully logged in to Crew Buddy");
@@ -17,7 +16,6 @@ const onSuccess = async (res: Response, phpSessionId: string) => {
 };
 
 const onError = (err: string) => {
-  console.log("ERROR");
   throw new Error(err);
 };
 
